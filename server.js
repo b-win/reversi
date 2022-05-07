@@ -1,6 +1,6 @@
 
 /* set up the static file server */
-let static - require('node-static');
+let static = require('node-static');
 
 /* set up the shttp server library */
 let http = require('http');
