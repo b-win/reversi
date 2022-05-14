@@ -13,8 +13,14 @@ function getIRIParamVal(reqKey) {
 
 let username = getIRIParamVal('username');
 
-if((typeof username == 'undefined') || (username === null)){
+if ((typeof username == 'undefined') || (username === null)){
 	username = "Seo Dal-Mi_"+Math.floor(Math.random()*1000);
 }
 
 $('#messages').prepend('<b>'+username+':</b>')
+
+
+let socket = io();
+socket.on('log', function(array) {
+	console.log.apply(console, array);
+});
