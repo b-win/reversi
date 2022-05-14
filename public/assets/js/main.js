@@ -13,7 +13,7 @@ function getIRIParamVal(reqKey) {
 
 let username = getIRIParamVal('username');
 
-if ((typeof username == 'undefined') || (username === null)){
+if ((typeof username == 'undefined') || (username === null) || (username === 'null') || (username === "")) {
 	username = "Seo Dal-Mi_"+Math.floor(Math.random()*1000);
 }
 
