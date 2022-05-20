@@ -37,6 +37,7 @@ function makeInviteButton(socket_id) {
     return newNode;
 }
 
+
 socket.on('join_room_response', (payload) => {
     if ((typeof payload == 'undefined') || (payload === null)) {
         console.log('Server did not send a payload');
@@ -53,7 +54,7 @@ socket.on('join_room_response', (payload) => {
     }
 
     let domElements = $('.socket_' + payload.socket_id);
-    /* If we are being repeat notified then return */
+    /* If we are being repeat notified thn return */
     if (domElements.length !== 0) {
         return;
     }
@@ -90,7 +91,8 @@ socket.on('join_room_response', (payload) => {
     nodeA.append(nodeC);
 
     $("#players").append(nodeA);
-    nodeA.show("fade", 1000);
+
+	console.log(JSON.stringify(nodeA));
 
     /* Announcing in the chat that someone has arrived*/
     let newHTML = '<p class=\'join_room_response\'>' + payload.username + ' joined the ' + payload.room + ' (There are ' + payload.count + ' users in this room)</p>';
@@ -131,6 +133,15 @@ socket.on('player_disconnected', (payload) => {
     if ((typeof payload == 'undefined') || (payload === null)) {
         console.log('Server did not send a payload');
         return;
+    }
+
+    if(payload.socket_id === socket.id){
+        return;
+    }
+
+    let domElements = $('.socket_'+payload.socket_id);
+    if(domElements.length !== 0){
+        domElements.hide("fade", 500);
     }
 
     let newHTML = '<p class=\'left_room_response\'>' + payload.username + ' left the ' + payload.room + ' (There are ' + payload.count + ' users in this room)</p>';
