@@ -91,8 +91,7 @@ socket.on('join_room_response', (payload) => {
     nodeA.append(nodeC);
 
     $("#players").append(nodeA);
-
-	console.log(JSON.stringify(nodeA));
+    nodeA.show("fade", 1000);
 
     /* Announcing in the chat that someone has arrived*/
     let newHTML = '<p class=\'join_room_response\'>' + payload.username + ' joined the ' + payload.room + ' (There are ' + payload.count + ' users in this room)</p>';
