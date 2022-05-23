@@ -84,7 +84,8 @@ socket.on('join_room_response', (payload) => {
     nodeC.addClass("col");
     nodeC.addClass("text-start");
     nodeC.addClass("socket_" + payload.socket_id);
-    let buttonC = makeInviteButton(payload.socket_id);
+    // let buttonC = makeInviteButton(payload.socket_id);
+    let buttonC = makeInviteButton();
     nodeC.append(buttonC);
 
     nodeA.append(nodeB);
@@ -94,7 +95,29 @@ socket.on('join_room_response', (payload) => {
     nodeA.show("fade", 1000);
 
     /* Announcing in the chat that someone has arrived*/
-    let newHTML = '<p class=\'join_room_response\'>' + payload.username + ' joined the ' + payload.room + ' (There are ' + payload.count + ' users in this room)</p>';
+    let newHTML = '<p class=\'join_room_response\'>' + payload.username + ' joined the ' + payload.room + '. (There are ' + payload.count + ' users in this room.)</p>';
+    let newNode = $(newHTML);
+    newNode.hide();
+    $('#messages').prepend(newNode);
+    newNode.show("fade", 500);
+})
+
+socket.on('player_disconnected', (payload) => {
+    if ((typeof payload == 'undefined') || (payload === null)) {
+        console.log('Server did not send a payload');
+        return;
+    }
+
+    if(payload.socket_id === socket.id){
+        return;
+    }
+
+    let domElements = $('.socket_'+payload.socket_id);
+    if(domElements.length !== 0){
+        domElements.hide("fade", 500);
+    }
+
+    let newHTML = '<p class=\'left_room_response\'>' + payload.username + ' left the ' + payload.room + ' (There are ' + payload.count + ' users in this room)</p>';
     let newNode = $(newHTML);
     newNode.hide();
     $('#messages').prepend(newNode);
@@ -126,28 +149,6 @@ socket.on('send_chat_message_response', (payload) => {
     $('#messages').prepend(newNode);
     newNode.show("fade", 500);
 
-})
-
-socket.on('player_disconnected', (payload) => {
-    if ((typeof payload == 'undefined') || (payload === null)) {
-        console.log('Server did not send a payload');
-        return;
-    }
-
-    if(payload.socket_id === socket.id){
-        return;
-    }
-
-    let domElements = $('.socket_'+payload.socket_id);
-    if(domElements.length !== 0){
-        domElements.hide("fade", 500);
-    }
-
-    let newHTML = '<p class=\'left_room_response\'>' + payload.username + ' left the ' + payload.room + ' (There are ' + payload.count + ' users in this room)</p>';
-    let newNode = $(newHTML);
-    newNode.hide();
-    $('#messages').prepend(newNode);
-    newNode.show("fade", 500);
 })
 
 /* request to join chat */
